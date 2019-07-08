@@ -15,7 +15,7 @@ import shuffleIcon from "../../assets/images/shuffle.svg";
 import backwardIcon from "../../assets/images/backward.svg";
 import forwardIcon from "../../assets/images/forward.svg";
 import playIcon from "../../assets/images/play.svg";
-import pauseIcon from "../../assets/images/pause.svg";
+// import pauseIcon from "../../assets/images/pause.svg";
 import repeatIcon from "../../assets/images/repeat.svg";
 
 const Player = () => {
