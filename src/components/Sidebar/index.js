@@ -13,7 +13,6 @@ import { Creators as PlaylistActions } from "../../store/ducks/playlists";
 const Sidebar = props => {
   useEffect(() => {
     props.getPlaylistRequest();
-    console.log("props", props.playlists);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -22,7 +21,7 @@ const Sidebar = props => {
       <div>
         <Nav main>
           <li>
-            <a href="">Navegar</a>
+            <Link to="/">Navegar</Link>
           </li>
           <li>
             <a href="">Rádio</a>
@@ -68,7 +67,7 @@ const Sidebar = props => {
           </li>
           {props.playlists.data.map(playlist => (
             <li key={playlist.id}>
-              <Link to={`playlists/${playlist.id}`}>{playlist.title}</Link>
+              <Link to={`/playlists/${playlist.id}`}>{playlist.title}</Link>
             </li>
           ))}
         </Nav>

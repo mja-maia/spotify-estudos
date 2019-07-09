@@ -1,45 +1,56 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { Container, Title, List, PlayList } from "./styles";
 
-const Browse = () => (
-  <Container>
-    <Title>Navegar</Title>
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as PlaylistActions } from "../../store/ducks/playlists";
 
-    <List>
-      <PlayList to="/playlists/1">
-        <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="Playlist"
-        />
-        <strong>Rock dos Bons</strong>
-        <p>Relaxe enquanto você programa</p>
-      </PlayList>
-      <PlayList to="/playlists/1">
-        <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="Playlist"
-        />
-        <strong>Rock dos Bons</strong>
-        <p>Relaxe enquanto você programa</p>
-      </PlayList>
-      <PlayList to="/playlists/1">
-        <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="Playlist"
-        />
-        <strong>Rock dos Bons</strong>
-        <p>Relaxe enquanto você programa</p>
-      </PlayList>
-      <PlayList to="/playlists/1">
-        <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="Playlist"
-        />
-        <strong>Rock dos Bons</strong>
-        <p>Relaxe enquanto você programa</p>
-      </PlayList>
-    </List>
-  </Container>
-);
+const Browse = props => {
+  useEffect(() => {
+    props.getPlaylistRequest();
+  }, []);
 
-export default Browse;
+  return (
+    <Container>
+      <Title>Navegar</Title>
+
+      <List>
+        {props.playlists.data.map(playlist => (
+          <PlayList key={playlist.id} to={`/playlists/${playlist.id}`}>
+            <img src={playlist.thumbnail} alt={playlist.title} />
+            <strong>{playlist.title}</strong>
+            <p>{playlist.description}</p>
+          </PlayList>
+        ))}
+      </List>
+    </Container>
+  );
+};
+
+Browse.propTypes = {
+  getPlaylistRequest: PropTypes.func.isRequired,
+  playlists: PropTypes.shape({
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+        thumbnail: PropTypes.string,
+        description: PropTypes.string
+      })
+    )
+  }).isRequired
+};
+
+const mapStateToProps = state => ({
+  playlists: state.playlists
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(PlaylistActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Browse);
