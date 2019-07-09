@@ -17,27 +17,34 @@ import shuffleIcon from "../../assets/images/shuffle.svg";
 import backwardIcon from "../../assets/images/backward.svg";
 import forwardIcon from "../../assets/images/forward.svg";
 import playIcon from "../../assets/images/play.svg";
-// import pauseIcon from "../../assets/images/pause.svg";
+import pauseIcon from "../../assets/images/pause.svg";
 import repeatIcon from "../../assets/images/repeat.svg";
 
 import { connect } from "react-redux";
+import { Creators as PlayerActions } from "../../store/ducks/player";
+import { bindActionCreators } from "redux";
 
-const Player = ({ player }) => {
+const Player = ({ player, play, pause }) => {
   return (
     <Container>
       {!!player.currentSong && (
         <Sound url={player.currentSong.file} playStatus={player.status} />
       )}
-      <Current>
-        <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="cover"
-        />
 
-        <div>
-          <span>Times Like This</span>
-          <small>Foo Fighters</small>
-        </div>
+      <Current>
+        {!!player.currentSong && (
+          <>
+            <img
+              src={player.currentSong.thumbnail}
+              alt={player.currentSong.title}
+            />
+
+            <div>
+              <span>{player.currentSong.title}</span>
+              <small>{player.currentSong.author}</small>
+            </div>
+          </>
+        )}
       </Current>
 
       <Progress>
@@ -48,9 +55,15 @@ const Player = ({ player }) => {
           <button>
             <img src={backwardIcon} alt="backwardIcon" />
           </button>
-          <button>
-            <img src={playIcon} alt="playIcon" />
-          </button>
+          {!!player.currentSong && player.status === Sound.status.PLAYING ? (
+            <button onClick={pause}>
+              <img src={pauseIcon} alt="pauseIcon" />
+            </button>
+          ) : (
+            <button onClick={play}>
+              <img src={playIcon} alt="playIcon" />
+            </button>
+          )}
           <button>
             <img src={forwardIcon} alt="forwardIcon" />
           </button>
@@ -88,14 +101,25 @@ const Player = ({ player }) => {
 Player.propTypes = {
   player: PropTypes.shape({
     currentSong: PropTypes.shape({
+      thumbnail: PropTypes.string,
+      title: PropTypes.string,
+      author: PropTypes.string,
       file: PropTypes.string
     }),
     status: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  play: PropTypes.func.isRequired,
+  pause: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   player: state.player
 });
 
-export default connect(mapStateToProps)(Player);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(PlayerActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Player);
