@@ -10,21 +10,26 @@ import Routes from "./routes";
 
 import { Wrapper, Container, Content } from "./styles/components";
 
+import { Provider } from "react-redux";
+import store from "./store";
+
 function App() {
   return (
-    <BrowserRouter>
-      <GlobalStyle />
-      <Wrapper>
-        <Container>
-          <Sidebar />
-          <Content>
-            <Header />
-            <Routes />
-          </Content>
-        </Container>
-        <Player />
-      </Wrapper>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Wrapper>
+          <Container>
+            <Sidebar />
+            <Content>
+              <Header />
+              <Routes />
+            </Content>
+          </Container>
+          <Player />
+        </Wrapper>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
