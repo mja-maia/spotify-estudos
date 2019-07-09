@@ -61,7 +61,7 @@ const Playlist = props => {
                 <SongItem
                   key={song.id}
                   onClick={() => setSelectedSong(song.id)}
-                  onDoubleClick={() => props.loadSong(song)}
+                  onDoubleClick={() => props.loadSong(song, playlist.songs)}
                   selected={selectedSong === song.id}
                   playing={
                     props.currentSong && props.currentSong.id === song.id

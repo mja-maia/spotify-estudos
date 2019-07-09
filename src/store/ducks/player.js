@@ -3,11 +3,14 @@ import Sound from "react-sound";
 export const Types = {
   LOAD: "player/LOAD",
   PLAY: "player/PLAY",
-  PAUSE: "player/PAUSE"
+  PAUSE: "player/PAUSE",
+  NEXT: "player/NEXT",
+  PREV: "player/PREV"
 };
 
 const INITIAL_STATE = {
   currentSong: null,
+  list: [],
   status: Sound.status.PLAYING
 };
 
@@ -17,6 +20,7 @@ const player = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentSong: action.payload.song,
+        list: action.payload.list,
         status: Sound.status.PLAYING
       };
     case Types.PLAY:
@@ -29,6 +33,26 @@ const player = (state = INITIAL_STATE, action) => {
         ...state,
         status: Sound.status.PAUSED
       };
+    case Types.NEXT: {
+      const currentIndex = state.list.findIndex(
+        song => song.id === state.currentSong.id
+      );
+      const next = state.list[currentIndex + 1];
+      if (next) {
+        return { ...state, currentSong: next, status: Sound.status.PLAYING };
+      }
+      return state;
+    }
+    case Types.PREV: {
+      const currentIndex = state.list.findIndex(
+        song => song.id === state.currentSong.id
+      );
+      const prev = state.list[currentIndex - 1];
+      if (prev) {
+        return { ...state, currentSong: prev, status: Sound.status.PLAYING };
+      }
+      return state;
+    }
     default:
       return state;
   }
@@ -36,14 +60,20 @@ const player = (state = INITIAL_STATE, action) => {
 export default player;
 
 export const Creators = {
-  loadSong: song => ({
+  loadSong: (song, list) => ({
     type: Types.LOAD,
-    payload: { song }
+    payload: { song, list }
   }),
   play: () => ({
     type: Types.PLAY
   }),
   pause: () => ({
     type: Types.PAUSE
+  }),
+  next: () => ({
+    type: Types.NEXT
+  }),
+  prev: () => ({
+    type: Types.PREV
   })
 };
