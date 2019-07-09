@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Container, NewPlayList, Nav } from "./styles";
 import addPlaylistIcon from "../../assets/images/add_playlist.svg";
+import Loading from "../Loading";
 
 import { Link } from "react-router-dom";
 
@@ -64,6 +65,7 @@ const Sidebar = props => {
         <Nav>
           <li>
             <span>PLAYLIST</span>
+            {props.playlists.loading && <Loading />}
           </li>
           {props.playlists.data.map(playlist => (
             <li key={playlist.id}>
@@ -88,7 +90,8 @@ Sidebar.propTypes = {
         id: PropTypes.number,
         title: PropTypes.string
       })
-    )
+    ),
+    loading: PropTypes.bool
   }).isRequired
 };
 

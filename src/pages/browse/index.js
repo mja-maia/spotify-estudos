@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Container, Title, List, PlayList } from "./styles";
+import Loading from "../../components/Loading";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -14,7 +15,10 @@ const Browse = props => {
 
   return (
     <Container>
-      <Title>Navegar</Title>
+      <Title>
+        Navegar
+        {props.playlists.loading && <Loading />}
+      </Title>
 
       <List>
         {props.playlists.data.map(playlist => (
@@ -39,7 +43,8 @@ Browse.propTypes = {
         thumbnail: PropTypes.string,
         description: PropTypes.string
       })
-    )
+    ),
+    loading: PropTypes.bool
   }).isRequired
 };
 
